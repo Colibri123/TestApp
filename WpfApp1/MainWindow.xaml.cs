@@ -125,5 +125,37 @@ namespace WpfApp1
         {
             All = false;
         }
+
+        public void Doc() 
+        {
+            new Thread(() => 
+            {
+                grid.Dispatcher.Invoke(() => grid.ItemsSource = null);
+                DataSet dataSet = SQLRequest.Request(@$";WITH DocDS AS (SELECT * FROM (VALUES
+                                                    ('Январь','52','21','54'),
+                                                    ('Февраль','28','53','22'),
+                                                    ('Март','85','76','72'),
+                                                    ('Апрель','49','65','47'),
+                                                    ('Май','3','57','2'),
+                                                    ('Июнь','33','39','55'),
+                                                    ('Июль','99','7','66'),
+                                                    ('Август','39','97','85'),
+                                                    ('Сентябрь','61','9','28'),
+                                                    ('Октябрь','34','12','89'),
+                                                    ('Ноябрь','97','56','33'),
+                                                    ('Декабрь','54','32','26')
+                                                        )temp_SourceData(name,[2019],[1999],[2009]))
+                                                    SELECT * FROM DocDS
+                                                    unpivot(val FOR Год in ([2019],[1999],[2009]))u
+                                                    pivot(max(val)FOR name in ([Январь],[Февраль],[Март],[Апрель],[Май],[Июнь],[Июль],[Август],[Сентябрь],[Октябрь],[Ноябрь],[Декабрь]))p");
+                grid.Dispatcher.Invoke(() => grid.ItemsSource = dataSet.Tables[0].DefaultView);
+            }).Start();
+            
+        }
+
+        private void button_Click(object sender, RoutedEventArgs e)
+        {
+            Doc();
+        }
     }
 }
