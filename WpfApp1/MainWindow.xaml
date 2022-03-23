@@ -4,21 +4,22 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:WpfApp1"
+    
         xmlns:WpfControls="clr-namespace:Nevron.Nov.WpfControls;assembly=Nevron.Nov.WpfControls" x:Class="WpfApp1.MainWindow"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="855" Loaded="Window_Loaded" Closed="Window_Closed">
-    <Grid Margin="428,10,10,10">
+        Title="Центр информации фирм" Height="350" Width="855">
+    <Grid Margin="511,10,10,10">
         <DataGrid x:Name="grid" d:ItemsSource="{d:SampleData ItemCount=5}"/>
-        <Label Content="Город" HorizontalAlignment="Left" Margin="-394,14,0,0" VerticalAlignment="Top"/>
-        <Label Content="Почтовый адрес" HorizontalAlignment="Left" Margin="-394,45,0,0" VerticalAlignment="Top"/>
-        <Label Content="Юридический адрес" HorizontalAlignment="Left" Margin="-394,71,0,0" VerticalAlignment="Top"/>
+        <Label Content="Название фирмы" HorizontalAlignment="Left" Margin="-485,14,0,0" VerticalAlignment="Top" Width="130"/>
+        <Label Content="Почтовый адрес" HorizontalAlignment="Left" Margin="-485,45,0,0" VerticalAlignment="Top" Width="125"/>
+        <Label Content="Юридический адрес" HorizontalAlignment="Left" Margin="-485,71,0,0" VerticalAlignment="Top" Width="152"/>
 
-        <GroupBox HorizontalAlignment="Left" Height="156" Header="ФИЛЬТРАЦИЯ ДАННЫХ" Margin="-408,-8,0,0" VerticalAlignment="Top" Width="372"/>
+        <GroupBox HorizontalAlignment="Left" Height="156" Header="ФИЛЬТРАЦИЯ ДАННЫХ" Margin="-500,-8,0,0" VerticalAlignment="Top" Width="490"/>
 
-        <TextBox Margin="-346,16,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="FirmName" TextWrapping="Wrap" Text="" Height="24" KeyUp="CityName_KeyUp" Width="303"/>
-        <TextBox Margin="-288,47,0,0" Name="PostAddress" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Text="" Height="24" KeyUp="CityName_KeyUp" Width="245"/>
-        <TextBox Margin="-271,76,0,0" Name="JurAddress" HorizontalAlignment="Left" TextWrapping="Wrap" Text="" KeyUp="CityName_KeyUp" Width="228" Height="24" VerticalAlignment="Top"/>
-        <CheckBox Name="allData" Content="Все данные" HorizontalAlignment="Left" Margin="-394,102,0,0" VerticalAlignment="Top" Checked="allData_Checked"/>
+        <TextBox Margin="-378,16,0,0" HorizontalAlignment="Left" VerticalAlignment="Top" Name="FirmName" TextWrapping="Wrap" Text="" Height="24" KeyUp="CityName_KeyUp" Width="356"/>
+        <TextBox Margin="-378,47,0,0" Name="PostAddress" HorizontalAlignment="Left" VerticalAlignment="Top" TextWrapping="Wrap" Text="" Height="24" KeyUp="CityName_KeyUp" Width="356"/>
+        <TextBox Margin="-358,76,0,0" Name="JurAddress" HorizontalAlignment="Left" TextWrapping="Wrap" Text="" KeyUp="CityName_KeyUp" Width="336" Height="24" VerticalAlignment="Top"/>
+        <CheckBox Name="allData" Content="Все данные" HorizontalAlignment="Left" Margin="-485,102,0,0" VerticalAlignment="Top" Checked="allData_Checked" Unchecked="allData_Unchecked" Width="103"/>
 
     </Grid>
 
