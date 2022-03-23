@@ -1,9 +1,11 @@
 ﻿
+using Nevron.Nov.UI;
 using Oracle.ManagedDataAccess.Client;
 using System;
 using System.Data;
 using System.Data.Odbc;
 using System.Data.OleDb;
+using System.Linq;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -16,48 +18,82 @@ namespace WpfApp1
     /// </summary>
     public partial class MainWindow : Window
     {
+        DataSet dataSet = new DataSet();
         SQLRequest SQLRequest = new SQLRequest();
+        bool All = false;
         public MainWindow()
         {
             InitializeComponent();
         }
 
-        private void updateDataGrid()
+        public string[] editText(string text) 
         {
-            DataSet dataSet = new DataSet();
-            dataSet = SQLRequest.Request("select * from FirmDS");
+            string[] Name = null;
+            char[] delimiterChars = { ' ', ',', ':', '/', '=', '&' };
+            
+                string g = text;
+                g = string.Join(" ", g.Split(' ')
+                .Select(x =>
+                    string.Concat(
+                        x.Length >= 1 ? x.Substring(0, 1).ToUpper() : "",
+                        x.Length > 1 ? x.Substring(1, x.Length - 1).ToLower() : "")
+                    )); ;
+                return Name = g.Split(delimiterChars);            
+            
+        }
+
+        private void updateDataGrid()
+        {            
+           
             grid.Dispatcher.Invoke(() => 
             {
-                grid.ItemsSource = dataSet.Tables[0].DefaultView;
+                grid.ItemsSource = SQLRequest.Request(@$"SELECT FirmDS.Name,
+                                    		FirmDS.Inn,
+                                    		FirmDS.Phone,
+                                    		FirmDS.EMAIL,
+                                    		FirmDS.Reserve,
+                                    		FirmDS.VipSign,
+                                    		FirmDS.PostAddress,
+                                    		FirmDS.JurAddress,
+                                    		FirmDS.LicNumber,
+                                    		FirmDS.BeginDate,
+                                    		CityDS.Name,
+                                    		CityDS.BeginDate,
+                                    		UserDS.UserName,
+                                    		RegionDS.RegionName,
+                                    		StatusOfLocalsDS.StatusOfLocalsName,
+                                    		OwnerShipsDS.OwnerShipsName
+                                    FROM CityDS INNER JOIN
+                                    		FirmDS ON CityDS.CityID = FirmDS.Post_city_iD 
+                                    		{(All ? "" : $"AND FirmDS.Name IN('{string.Join("','", editText(FirmName.Text))}') AND")} {(All ? "" : $" FirmDS.JurAddress IN('{string.Join("','", editText(JurAddress.Text))}') AND")} {(All ? "" : $" FirmDS.PostAddress IN('{string.Join("','", editText(PostAddress.Text))}')")} INNER JOIN
+                                    		RegionDS ON CityDS.RegionID = RegionDS.RegionID INNER JOIN
+                                    		UserDS ON FirmDS.UserID = UserDS.UserID INNER JOIN
+                                    		StatusOfLocalsDS ON CityDS.StatusOfLocalsID = StatusOfLocalsDS.StatusOfLocalsID INNER JOIN
+                                    		OwnerShipsDS ON FirmDS.OwnerShipsID = OwnerShipsDS.OwnerShipsID").Tables[0].DefaultView;
 
             });
            
 
-        }
-
-        private void setConnection()
-        {
-            var connectString = "Provider=chtpz/w@garnet;Data Source=chtpz/w@garnet;Password=secret;User ID=scott";
-            var con = new OleDbConnection(connectString);
-            con.Open();
-            try
-            {
-                con.Open();
-            }
-            catch (Exception ex)
-            {
-
-            }
-        }
+        }        
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
-            new Thread(updateDataGrid).Start();
         }
 
         private void Window_Closed(object sender, EventArgs e)
         {
             
+        }
+
+        private void CityName_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            new Thread(updateDataGrid).Start();
+        }
+
+        private void allData_Checked(object sender, RoutedEventArgs e)
+        {
+            All = true; 
+            new Thread(updateDataGrid).Start();
         }
     }
 }
