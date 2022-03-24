@@ -33,54 +33,13 @@ namespace WpfApp1
             new Thread(() =>
             {
                 for (int i = 0; i <= 100; i++)
-                {
-                    if (i == 10)
-                    {
-                        load.Dispatcher.Invoke(()=> load.Content = "загрузка.") ;
-                    }
-                    if (i == 20)
-                    {
-                        load.Dispatcher.Invoke(() => load.Content = "загрузка..");
-                    }
-                    if (i == 30)
-                    {
-                        load.Dispatcher.Invoke(() => load.Content = "загрузка...");
-                    }
-                    if (i == 40)
-                    {
-                        load.Dispatcher.Invoke(() => load.Content = "загрузка....");
-                    }
-                    if (i == 50)
-                    {
-                        load.Dispatcher.Invoke(() => load.Content = "загрузка.....");
-                    }
-                    if (i == 60)
-                    {
-                        load.Dispatcher.Invoke(() => load.Content = "загрузка.");
-                    }
-                    if (i == 70)
-                    {
-                        load.Dispatcher.Invoke(() => load.Content = "загрузка..");
-                    }
-                    if (i == 80)
-                    {
-                        load.Dispatcher.Invoke(() => load.Content = "загрузка...");
-                    }
-                    if (i == 90)
-                    {
-                        load.Dispatcher.Invoke(() => load.Content = "загрузка....");
-
-                    }
-                    if (i == 100)
-                    {
-                        load.Dispatcher.Invoke(() => load.Content = "загрузка.....");
-                    }
+                {                    
                     prog.Dispatcher.Invoke(() =>
                     {
                         prog.Value = i;
 
                     });
-                    Thread.Sleep(10);
+                    Thread.Sleep(15);
                 };
                 Dispatcher.Invoke(() => 
                 {

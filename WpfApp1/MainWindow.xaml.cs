@@ -48,23 +48,9 @@ namespace WpfApp1
                 {
                     grid.Dispatcher.Invoke(() => grid.ItemsSource = null);
 
-                    if (allData.Dispatcher.Invoke(() => allData.IsChecked) == false)
+                    if (allData.Dispatcher.Invoke(()=> allData.IsChecked) == true)
                     {
-                        if (FirmName.Dispatcher.Invoke(() => FirmName.Text) == "")
-                        {
-                            return;
-                        }
-                        if (JurAddress.Dispatcher.Invoke(() => JurAddress.Text) == "")
-                        {
-                            return;
-                        }
-                        if (PostAddress.Dispatcher.Invoke(() => PostAddress.Text) == "")
-                        {
-                            return;
-                        }
-                    }
-
-                    DataSet dataSet = SQLRequest.Request(@$"SELECT FirmDS.Name,
+                        DataSet dataSet = SQLRequest.Request(@$"SELECT FirmDS.Name,
                                                                     FirmDS.Inn,
                                                             		FirmDS.Phone,
                                                             		FirmDS.EMAIL,
@@ -84,12 +70,133 @@ namespace WpfApp1
                                                                     FirmDS ON CityDS.CityID = FirmDS.Post_city_iD
                                                                     { (All ? "" : $"AND FirmDS.Name IN('{editText(FirmName.Dispatcher.Invoke(() => FirmName.Text))}') AND")}
                                             { (All ? "" : $" FirmDS.JueCityID IN('{JurAddress.Dispatcher.Invoke(() => JurAddress.Text)}') AND")}
-                                            { (All ? "" : $" FirmDS.Post_city_iD IN('{string.Join("','", edit(PostAddress.Dispatcher.Invoke(() => PostAddress.Text)))}PostAddress.Dispatcher.Invoke(() => PostAddress.Text)')")} INNER JOIN                    
+                                            { (All ? "" : $" FirmDS.Post_city_iD IN('{string.Join("','", edit(PostAddress.Dispatcher.Invoke(() => PostAddress.Text)))}")} INNER JOIN                    
                                                                     RegionDS ON CityDS.RegionID = RegionDS.RegionID INNER JOIN
                                                                     UserDS ON FirmDS.UserID = UserDS.UserID INNER JOIN
                                                                     StatusOfLocalsDS ON CityDS.StatusOfLocalsID = StatusOfLocalsDS.StatusOfLocalsID INNER JOIN
                                                                     OwnerShipsDS ON FirmDS.OwnerShipsID = OwnerShipsDS.OwnerShipsID");
-                    grid.Dispatcher.Invoke(() => grid.ItemsSource = dataSet.Tables[0].DefaultView);
+                        grid.Dispatcher.Invoke(() => grid.ItemsSource = dataSet.Tables[0].DefaultView);
+                        return;
+                    }
+
+                    if (FirmName.Dispatcher.Invoke(() => FirmName.Text)!= "" && JurAddress.Dispatcher.Invoke(() => JurAddress.Text) == "" && PostAddress.Dispatcher.Invoke(() => PostAddress.Text) == "")
+                    {
+                        DataSet dataSet = SQLRequest.Request(@$"SELECT FirmDS.Name,
+                                                                    FirmDS.Inn,
+                                                            		FirmDS.Phone,
+                                                            		FirmDS.EMAIL,
+                                                            		FirmDS.Reserve,
+                                                            		FirmDS.VipSign,
+                                                            		FirmDS.PostAddress,
+                                                            		FirmDS.JurAddress,
+                                                            		FirmDS.LicNumber,
+                                                            		FirmDS.BeginDate,
+                                                            		CityDS.Name,
+                                                            		CityDS.BeginDate,
+                                                            		UserDS.UserName,
+                                                            		RegionDS.RegionName,
+                                                            		StatusOfLocalsDS.StatusOfLocalsName,
+                                                            		OwnerShipsDS.OwnerShipsName
+                                                            FROM CityDS INNER JOIN
+                                                                    FirmDS ON CityDS.CityID = FirmDS.Post_city_iD
+                                                                    { (All ? "" : $"AND FirmDS.Name IN('{editText(FirmName.Dispatcher.Invoke(() => FirmName.Text))}')")} INNER JOIN                    
+                                                                    RegionDS ON CityDS.RegionID = RegionDS.RegionID INNER JOIN
+                                                                    UserDS ON FirmDS.UserID = UserDS.UserID INNER JOIN
+                                                                    StatusOfLocalsDS ON CityDS.StatusOfLocalsID = StatusOfLocalsDS.StatusOfLocalsID INNER JOIN
+                                                                    OwnerShipsDS ON FirmDS.OwnerShipsID = OwnerShipsDS.OwnerShipsID");
+                        grid.Dispatcher.Invoke(() => grid.ItemsSource = dataSet.Tables[0].DefaultView);
+                        return;
+                    }
+
+                    if (FirmName.Dispatcher.Invoke(() => FirmName.Text) == "" && JurAddress.Dispatcher.Invoke(() => JurAddress.Text) != "" && PostAddress.Dispatcher.Invoke(() => PostAddress.Text) == "")
+                    {
+                        DataSet dataSet = SQLRequest.Request(@$"SELECT FirmDS.Name,
+                                                                    FirmDS.Inn,
+                                                            		FirmDS.Phone,
+                                                            		FirmDS.EMAIL,
+                                                            		FirmDS.Reserve,
+                                                            		FirmDS.VipSign,
+                                                            		FirmDS.PostAddress,
+                                                            		FirmDS.JurAddress,
+                                                            		FirmDS.LicNumber,
+                                                            		FirmDS.BeginDate,
+                                                            		CityDS.Name,
+                                                            		CityDS.BeginDate,
+                                                            		UserDS.UserName,
+                                                            		RegionDS.RegionName,
+                                                            		StatusOfLocalsDS.StatusOfLocalsName,
+                                                            		OwnerShipsDS.OwnerShipsName
+                                                            FROM CityDS INNER JOIN
+                                                                    FirmDS ON CityDS.CityID = FirmDS.Post_city_iD AND
+                                            { (All ? "" : $" FirmDS.JueCityID IN('{JurAddress.Dispatcher.Invoke(() => JurAddress.Text)}') ")} INNER JOIN                    
+                                                                    RegionDS ON CityDS.RegionID = RegionDS.RegionID INNER JOIN
+                                                                    UserDS ON FirmDS.UserID = UserDS.UserID INNER JOIN
+                                                                    StatusOfLocalsDS ON CityDS.StatusOfLocalsID = StatusOfLocalsDS.StatusOfLocalsID INNER JOIN
+                                                                    OwnerShipsDS ON FirmDS.OwnerShipsID = OwnerShipsDS.OwnerShipsID");
+                        grid.Dispatcher.Invoke(() => grid.ItemsSource = dataSet.Tables[0].DefaultView);
+                        return;
+                    }
+
+                    if (FirmName.Dispatcher.Invoke(() => FirmName.Text) == "" && JurAddress.Dispatcher.Invoke(() => JurAddress.Text) == "" && PostAddress.Dispatcher.Invoke(() => PostAddress.Text) != "")
+                    {
+                        DataSet dataSet = SQLRequest.Request(@$"SELECT FirmDS.Name,
+                                                                    FirmDS.Inn,
+                                                            		FirmDS.Phone,
+                                                            		FirmDS.EMAIL,
+                                                            		FirmDS.Reserve,
+                                                            		FirmDS.VipSign,
+                                                            		FirmDS.PostAddress,
+                                                            		FirmDS.JurAddress,
+                                                            		FirmDS.LicNumber,
+                                                            		FirmDS.BeginDate,
+                                                            		CityDS.Name,
+                                                            		CityDS.BeginDate,
+                                                            		UserDS.UserName,
+                                                            		RegionDS.RegionName,
+                                                            		StatusOfLocalsDS.StatusOfLocalsName,
+                                                            		OwnerShipsDS.OwnerShipsName
+                                                            FROM CityDS INNER JOIN
+                                                                    FirmDS ON CityDS.CityID = FirmDS.Post_city_iD AND
+                                            { (All ? "" : $" FirmDS.Post_city_iD IN('{string.Join("','", edit(PostAddress.Dispatcher.Invoke(() => PostAddress.Text)))}')")} INNER JOIN                    
+                                                                    RegionDS ON CityDS.RegionID = RegionDS.RegionID INNER JOIN
+                                                                    UserDS ON FirmDS.UserID = UserDS.UserID INNER JOIN
+                                                                    StatusOfLocalsDS ON CityDS.StatusOfLocalsID = StatusOfLocalsDS.StatusOfLocalsID INNER JOIN
+                                                                    OwnerShipsDS ON FirmDS.OwnerShipsID = OwnerShipsDS.OwnerShipsID");
+                        grid.Dispatcher.Invoke(() => grid.ItemsSource = dataSet.Tables[0].DefaultView);
+                        return;
+                    }
+
+                    if (FirmName.Dispatcher.Invoke(() => FirmName.Text) != "" && JurAddress.Dispatcher.Invoke(() => JurAddress.Text) != "" && PostAddress.Dispatcher.Invoke(() => PostAddress.Text) != "")
+                    {
+                        DataSet dataSet = SQLRequest.Request(@$"SELECT FirmDS.Name,
+                                                                    FirmDS.Inn,
+                                                            		FirmDS.Phone,
+                                                            		FirmDS.EMAIL,
+                                                            		FirmDS.Reserve,
+                                                            		FirmDS.VipSign,
+                                                            		FirmDS.PostAddress,
+                                                            		FirmDS.JurAddress,
+                                                            		FirmDS.LicNumber,
+                                                            		FirmDS.BeginDate,
+                                                            		CityDS.Name,
+                                                            		CityDS.BeginDate,
+                                                            		UserDS.UserName,
+                                                            		RegionDS.RegionName,
+                                                            		StatusOfLocalsDS.StatusOfLocalsName,
+                                                            		OwnerShipsDS.OwnerShipsName
+                                                            FROM CityDS INNER JOIN
+                                                                    FirmDS ON CityDS.CityID = FirmDS.Post_city_iD
+                                                                    { (All ? "" : $"AND FirmDS.Name IN('{editText(FirmName.Dispatcher.Invoke(() => FirmName.Text))}') AND")}
+                                            { (All ? "" : $" FirmDS.JueCityID IN('{JurAddress.Dispatcher.Invoke(() => JurAddress.Text)}') AND")}
+                                            { (All ? "" : $" FirmDS.Post_city_iD IN('{string.Join("','", edit(PostAddress.Dispatcher.Invoke(() => PostAddress.Text)))}')")} INNER JOIN                    
+                                                                    RegionDS ON CityDS.RegionID = RegionDS.RegionID INNER JOIN
+                                                                    UserDS ON FirmDS.UserID = UserDS.UserID INNER JOIN
+                                                                    StatusOfLocalsDS ON CityDS.StatusOfLocalsID = StatusOfLocalsDS.StatusOfLocalsID INNER JOIN
+                                                                    OwnerShipsDS ON FirmDS.OwnerShipsID = OwnerShipsDS.OwnerShipsID");
+                        grid.Dispatcher.Invoke(() => grid.ItemsSource = dataSet.Tables[0].DefaultView);
+                        return;
+                    }
+
                 }).Start();
             }
             catch (Exception)
